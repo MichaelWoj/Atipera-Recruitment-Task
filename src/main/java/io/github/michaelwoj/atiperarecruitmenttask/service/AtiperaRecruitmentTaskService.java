@@ -26,10 +26,10 @@ public class AtiperaRecruitmentTaskService {
     public AtiperaRecruitmentTaskService(RestTemplate restTemplate){
         this.restTemplate = restTemplate;
     }
-    private String baseUrl = "https://api.github.com";
+    private static final String BASE_URL = "https://api.github.com";
 
     public List<RepoInfo> getUserRepos(String username){
-        String reposUrl = baseUrl + "/users/"+username+"/repos";
+        String reposUrl = BASE_URL + "/users/"+username+"/repos";
         try{
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -43,12 +43,12 @@ public class AtiperaRecruitmentTaskService {
                         username
                 );
             
-            List<RepoInfo> allRepos = Arrays.asList(response.getBody());
+            RepoInfo[] allRepos = response.getBody();
             List<RepoInfo> nonForkedRepos = new ArrayList<>();
 
             for (RepoInfo repo : allRepos) {
                     if (!repo.isFork()) {
-                        String branchUrl = String.format(baseUrl + "/repos/"+username+"/"+repo.getRepoName()+"/branches");
+                        String branchUrl = String.format(BASE_URL + "/repos/"+username+"/"+repo.getRepoName()+"/branches");
 
                         ResponseEntity<BranchInfo[]> branchResponse = restTemplate.exchange(
                                 branchUrl,
@@ -63,8 +63,12 @@ public class AtiperaRecruitmentTaskService {
                 }
 
                 return nonForkedRepos;
-        }catch (HttpClientErrorException.NotFound ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+
+        }catch (HttpClientErrorException ex) {
+            if (ex.getStatusCode() == HttpStatus.NOT_FOUND){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User "+username+" not found");
+            }
+            throw new ResponseStatusException(ex.getStatusCode(), ex.getMessage());
         }
     }
 }
