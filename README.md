@@ -46,10 +46,10 @@ The response will be returned to the user in a JSON format:
 [
   {
   name: "DietTrackingApp"
-  login:	"MichaelWoj"
+  login: "MichaelWoj"
   branch:	
     0:	
-      name:	"main"
+      name: "main"
       sha: "2e5a27bff173540680eb2e32e32c4fa073fab641"
   }
 ]
