@@ -1,23 +1,17 @@
 package io.github.michaelwoj.atiperarecruitmenttask.entity;
-
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RepoInfo {
-
+@AllArgsConstructor
+public class FlattenedBranchInfo {
     @JsonProperty("name")
-    private String repoName;
+    private String flattenedBranchName;
 
-    @JsonProperty("fork")
-    private boolean isFork;
-
-    private Owner owner;
-
-    private List<BranchInfo> branches;
+    @JsonProperty("sha")
+    private String flattenedLastCommitSha;
 }
