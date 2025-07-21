@@ -29,9 +29,9 @@ public class AtiperaRecruitmentTaskIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].name").exists())
-                .andExpect(jsonPath("$[0].owner.login").exists())
-                .andExpect(jsonPath("$[0].branches").isArray())
-                .andExpect(jsonPath("$[0].branches[0].name").exists())
-                .andExpect(jsonPath("$[0].branches[0].commit.sha").exists());
+                .andExpect(jsonPath("$[0].login").exists())
+                .andExpect(jsonPath("$[0].branch").isArray())
+                .andExpect(jsonPath("$[0].branch[0].name").exists())
+                .andExpect(jsonPath("$[0].branch[0].sha").exists());
     }
 }
